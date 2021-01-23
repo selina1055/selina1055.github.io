@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, minimum-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Python Level 2 Project">
+    <meta name="author" content="Master Bug">
+    <title>使用說明 | 碼寶中級專題範例</title>
+    <link rel="icon" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/monokai-sublime.min.css">
+    <link rel="stylesheet" href="/static/main.css?191223">
+    <link rel="canonical" href="https://pyone.tw/">
+  </head>
+
+  <body>
+
+    <div class="container">
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container">
+          <h1 class="navbar-brand">TOEIC Words</h1>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item"> <a class="nav-link" href="/">首頁</a> </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link active dropdown-toggle" href="/usage/" id="navbardrop" data-toggle="dropdown">
+                  使用說明
+                </a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="#atestcenter">測驗中心</a>
+                  <a class="dropdown-item" href="#aexaminee">參測考生</a>
+                </div>
+              </li>
+              <li class="nav-item"> <a class="nav-link" href="/code/">程式碼</a> </li>
+              <li class="nav-item"> <a class="nav-link" href="/database/">資料表</a> </li>
+              <li class="nav-item"> <a class="nav-link" href="/aboutme/">關於作者</a> </li>
+              <li class="nav-item"> <a class="nav-link" href="https://pyone.tw/" target="_blank">碼寶官網</a> </li>
+              <li class="nav-item"> <a class="nav-link" href="https://github.com/micropyone/micropyone.github.io" target="_blank">GitHub</a> </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <main role="main">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="page-title">使用說明</h2>
+            </div>
+        </div>
+
+        <div class="page-section" id="atestcenter"></div>
+        <h3 class="text-center"><span>測驗中心</span></h3>
+
+        <h4 class="small-sec"><span>單字建檔查詢</span></h4>
+        <pre>
+            <code class="html">
+        ====================
+        測驗中心
+        ====================
+        a:單字建檔查詢
+        b:選擇題型設定
+        c:填充題型設定
+        d:參測考生列表
+        e:測驗成績統計
+        f:個人成績查詢
+        q:離開
+        ====================
+        請選擇: a
+        1.增修 2.查詢 3.刪除 4.列表 exit.離開: 1
+        單字數: 200
+        單字: new
+        定義: 新的
+        編號: 201  單字: new  定義: 新的
+
+        1.增修 2.查詢 3.刪除 4.列表 exit.離開:
+            </code>
+        </pre>
+        <ol class="note">
+          <li>增修：未設定則新增，已設定則覆蓋修改定義</li>
+          <li>查詢：查詢一個單字</li>
+          <li>刪除：刪除一個單字</li>
+          <li>列表：列出全部單字</li>
+        </ol>
+
+        <h4 class="small-sec"><span>選擇題型設定</span></h4>
+        <pre>
+            <code class="html">
+        ====================
+        測驗中心
+        ====================
+        a:單字建檔查詢
+        b:選擇題型設定
+        c:填充題型設定
+        d:參測考生列表
+        e:測驗成績統計
+        f:個人成績查詢
+        q:離開
+        ====================
+        請選擇: b
+        設定選項:4 題數:10
+        3.三選一 4.四選一 5.五選一 exit.離開: 4
+        請輸入題數: 20
+        設定選項:4 題數:20
+        3.三選一 4.四選一 5.五選一 exit.離開:
+            </code>
+        </pre>
+        <ol class="note">
+          <li>顯示目前的題型設定</li>
+          <li>設定選項 (3.三選一 4.四選一 5.五選一)</li>
+          <li>設定題數</li>
+          <li>顯示已更新的題型設定</li>
+        </ol>
+
+        <h4 class="small-sec"><span>填充題型設定</span></h4>
+        <pre>
+            <code class="html">
+        ====================
+        測驗中心
+        ====================
+        a:單字建檔查詢
+        b:選擇題型設定
+        c:填充題型設定
+        d:參測考生列表
+        e:測驗成績統計
+        f:個人成績查詢
+        q:離開
+        ====================
+        請選擇: c
+        設定選項:1 題數:10
+        1.提示首字母 2.提示首尾字母 exit.離開: 2
+        請輸入題數: 20
+        設定選項:2 題數:20
+        1.提示首字母 2.提示首尾字母 exit.離開:
+            </code>
+        </pre>
+        <ol class="note">
+          <li>顯示目前的題型設定</li>
+          <li>設定選項 (1.提示首字母 2.提示首尾字母)</li>
+          <li>設定題數</li>
+          <li>顯示已更新的題型設定</li>
+        </ol>
+
+        <h4 class="small-sec"><span>參測考生列表</span></h4>
+        <pre>
+            <code class="html">
+        ====================
+        測驗中心
+        ====================
+        a:單字建檔查詢
+        b:選擇題型設定
+        c:填充題型設定
+        d:參測考生列表
+        e:測驗成績統計
+        f:個人成績查詢
+        q:離開
+        ====================
+        請選擇: d
+        ID  帳號       姓名                 性別   出生年
+        --------------------------------------------------
+          1 chris      Chris Pine           M      1980
+          2 gal        Gal Gadot            F      1985
+            </code>
+        </pre>
+        <ol class="note">
+          <li>列出所有考生基本資料</li>
+          <li>欄位順序：編號、帳號、姓名、性別、出生年</li>
+        </ol>
+
+        <h4 class="small-sec"><span>測驗成績統計</span></h4>
+        <pre>
+            <code class="html">
+        ====================
+        測驗中心
+        ====================
+        a:單字建檔查詢
+        b:選擇題型設定
+        c:填充題型設定
+        d:參測考生列表
+        e:測驗成績統計
+        f:個人成績查詢
+        q:離開  
+        ====================
+        請選擇: e
+        ------------ 測驗人數及平均分數 ------------
+        填空題    1   90.0
+        選擇題    2  100.0
+        ------------ 成績列表依日期降冪 ------------
+          3 chris      選擇題  100 2019-03-12
+          1 chris      選擇題  100 2017-10-01
+          2 gal        填空題   90 2017-10-01
+            </code>
+        </pre>
+        <ol class="note">
+          <li>區分題型，統計測驗人數及平均分數</li>
+          <li>個別成績明細列表依日期降冪</li>
+        </ol>
+
+        <h4 class="small-sec"><span>個人成績查詢</span></h4>
+        <pre>
+            <code class="html">
+        ====================
+        測驗中心
+        ====================
+        a:單字建檔查詢
+        b:選擇題型設定
+        c:填充題型設定
+        d:參測考生列表
+        e:測驗成績統計
+        f:個人成績查詢
+        q:離開
+        ====================
+        請選擇: f
+        請輸入帳號 (exit.離開): bug
+        bug 查無任何成績
+        請輸入帳號 (exit.離開): chris
+          1 chris      選擇題  100 2019-04-10
+        請輸入帳號 (exit.離開):
+            </code>
+        </pre>
+        <ol class="note">
+          <li>依指定考生帳號查詢該考生所有成績</li>
+          <li>欄位順序：編號、帳號、題型、分數、測驗日期</li>
+        </ol>
+
+        <hr>
+
+        <div class="page-section" id="aexaminee"></div>
+        <h3 class="text-center"><span>參測考生</span></h3>
+
+        <h4 class="small-sec"><span>登入．註冊</span></h4>
+        <pre>
+            <code class="html">
+        ====================
+        參測考生 尚未登入
+        ====================
+        a:登入．註冊
+        b:選擇題測驗
+        c:填充題測驗
+        d:個人成績查詢
+        e:個人資料修改
+        f:亂數播放單字
+        q:離開
+        ====================
+        請選擇: a
+        請先登入或註冊
+        請輸入帳號: bug
+        全名: Bug Chang
+        性別(F.女性 M.男性): M
+        出生年: 1987
+        註冊成功，可立即參加測驗
+            </code>
+        </pre>
+        <ol class="note">
+          <li>登入直接輸入帳號，不需要密碼</li>
+          <li>註冊輸入：帳號、全名、性別、出生年</li>
+        </ol>
+
+        <h4 class="small-sec"><span>選擇題測驗</span></h4>
+        <pre>
+            <code class="html">
+        ====================
+        參測考生 bug
+        ====================
+        a:登入．註冊
+        b:選擇題測驗
+        c:填充題測驗
+        d:個人成績查詢
+        e:個人資料修改
+        f:亂數播放單字
+        q:離開
+        ====================
+        請選擇: b
+        設定選項:4 題數:20
+        第 1 題: glimpse
+        1. (n.)加薪(v.)提高，舉起
+        2. (n.)普及，受歡迎
+        3. (v.)處理，加工(n.)過程
+        4. (n.)瞥見
+        請選答 (exit.中止): 4
+        ...
+        ...
+        ...
+        第 20 題: submit
+        1. (adv.)有必要時
+        2. (v.)提交，服從
+        3. (adj.)具體的;特別的
+        4. (v.)終止;結束
+        請選答 (exit.中止): 2
+        >>>
+        答對題數 19/20 分數 95
+            </code>
+        </pre>
+        <ol class="note">
+          <li>輸入選項數字</li>
+          <li>測驗完畢顯示答對題數及分數</li>
+        </ol>
+
+        <h4 class="small-sec"><span>填充題測驗</span></h4>
+        <pre>
+            <code class="html">
+        ====================
+        參測考生 bug
+        ====================
+        a:登入．註冊
+        b:選擇題測驗
+        c:填充題測驗
+        d:個人成績查詢
+        e:個人資料修改
+        f:亂數播放單字
+        q:離開
+        ====================
+        請選擇: c
+        設定選項:1 題數:10
+        第 1 題: d-------- ((v.)複製，重複)
+        請選答 (exit.中止): duplicate
+        正確為: duplicate
+        >>>
+        第 2 題: c------- ((n.)覆蓋，覆蓋範圍)
+        請選答 (exit.中止): coverage
+        正確為: coverage
+            </code>
+        </pre>
+        <ol class="note">
+          <li>依提示輸入完整單字</li>
+          <li>測驗完畢顯示答對題數及分數</li>
+        </ol>
+
+        <h4 class="small-sec"><span>個人成績查詢</span></h4>
+        <pre>
+            <code class="html">
+        ====================
+        參測考生 bug
+        ====================
+        a:登入．註冊
+        b:選擇題測驗
+        c:填充題測驗
+        d:個人成績查詢
+        e:個人資料修改
+        f:亂數播放單字
+        q:離開
+        ====================
+        請選擇: d
+          3 bug        選擇題  100 2019-04-10
+          4 bug        填空題   80 2019-04-10
+            </code>
+        </pre>
+        <ol class="note">
+          <li>查詢自己所有測驗成績</li>
+          <li>欄位順序：編號、帳號、題型、分數、測驗日期</li>
+        </ol>
+
+        <h4 class="small-sec"><span>個人資料修改</span></h4>
+        <pre>
+            <code class="html">
+        ====================
+        參測考生 bug
+        ====================
+        a:登入．註冊
+        b:選擇題測驗
+        c:填充題測驗
+        d:個人成績查詢
+        e:個人資料修改
+        f:亂數播放單字
+        q:離開
+        ====================
+        請選擇: e
+        姓名: Bug Chang
+        性別(F.女性 M.男性): M
+        出生年: 1987
+        --- 資料已更新 ---
+        編號: 3  帳號: bug
+        姓名: Bug Chang
+        性別代碼: M
+        出生年: 1987
+            </code>
+        </pre>
+        <ol class="note">
+          <li>修改個人資料</li>
+          <li>輸入順序：全名、性別、出生年</li>
+        </ol>
+
+        <h4 class="small-sec"><span>亂數播放單字</span></h4>
+        <pre>
+            <code class="html">
+        ====================
+        參測考生 bug
+        ====================
+        a:登入．註冊
+        b:選擇題測驗
+        c:填充題測驗
+        d:個人成績查詢
+        e:個人資料修改
+        f:亂數播放單字
+        q:離開
+        ====================
+        請選擇: f
+        請輸入單字數量 (10~30): 10
+        請輸入停頓秒數 (0~5): 1
+        glimpse : (n.)瞥見
+        wage : (n.)薪資
+        figure out : (v.)理解，想出
+        practice : (n.)實踐，做法(v.)練習
+        distribute : (v.)分配，分發
+        initiative : (n.)主動行動，進取心
+        provider : (n.)供應者
+        made from : (v.)由...構成(化學)
+        look up to : (v.)尊敬
+        promote : (v.)晉升，促進
+            </code>
+        </pre>
+        <ol class="note">
+          <li>提供單字記憶練習</li>
+          <li>設定每次練習單字數量</li>
+          <li>設定單字顯示停頓秒數</li>
+        </ol>
+      </main>
+
+      <hr>
+      <footer class="footer">
+        <p>&copy; 2020 碼寶程式教育中心</p>
+      </footer>
+    </div> <!-- /container -->
+
+    <script src="/static/jquery.slim.min.js"></script>
+    <script src="/static/popper.min.js"></script>
+    <script src="/static/bootstrap.min.js"></script>
+    <script src="/static/highlight.min.js"></script>
+    <script src="/static/main.js"></script>
+    <script> hljs.initHighlightingOnLoad(); </script>
+  </body>
+</html>

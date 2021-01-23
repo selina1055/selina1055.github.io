@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, minimum-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Python Level 2 Project">
+    <meta name="author" content="Master Bug">
+    <title>程式碼 | 碼寶中級專題範例</title>
+    <link rel="icon" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/tomorrow-night.min.css">
+    <link rel="stylesheet" href="/static/main.css?191223">
+    <link rel="canonical" href="https://pyone.tw/">
+  </head>
+
+  <body>
+
+    <div class="container">
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container">
+          <h1 class="navbar-brand">TOEIC Words</h1>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item"> <a class="nav-link" href="/">首頁</a> </li>
+              <li class="nav-item"> <a class="nav-link" href="/usage/">使用說明</a> </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link active dropdown-toggle" href="/code/" id="navbardrop" data-toggle="dropdown">
+                  程式碼
+                </a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="#atestcenter">測驗中心</a>
+                  <a class="dropdown-item" href="#aexaminee">參測考生</a>
+                  <a class="dropdown-item" href="#adb">資料庫模組</a>
+                </div>
+              </li>
+              <li class="nav-item"> <a class="nav-link" href="/database/">資料表</a> </li>
+              <li class="nav-item"> <a class="nav-link" href="/aboutme/">關於作者</a> </li>
+              <li class="nav-item"> <a class="nav-link" href="https://pyone.tw/" target="_blank">碼寶官網</a> </li>
+              <li class="nav-item"> <a class="nav-link" href="https://github.com/micropyone/micropyone.github.io" target="_blank">GitHub</a> </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <main role="main">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="page-title">程式碼</h2>
+            </div>
+        </div>
+
+        <div class="page-section" id="atestcenter"></div>
+        <h3 class="text-center"><span>測驗中心</span></h3>
+        <pre>
+            <code class="python"># atestcenter.py
+from adb import DB
+
+class TestCenter():
+    def __init__(self):
+        self.menu_title = '測驗中心'
+        self.menu = {
+            'a':'單字建檔查詢',
+            'b':'選擇題型設定',
+            'c':'填充題型設定',
+            'd':'參測考生列表',
+            'e':'測驗成績統計',
+            'f':'個人成績查詢',
+            'q':'離開',
+        }
+        self.menu_func = {
+            'a': lambda db, ft: self.create_words(db, ft),
+            'b': lambda db, ft: self.set_multiple_choice(db, ft),
+            'c': lambda db, ft: self.set_fill_in_the_blank(db, ft),
+            'd': lambda db, ft: self.examinees(db, ft),
+            'e': lambda db, ft: self.summary(db, ft),
+            'f': lambda db, ft: self.score_list(db, ft),
+        }
+        self.divider = '='*20
+
+    def show_menu(self):
+        """ 主選單
+        """
+        print(self.divider)
+        print(self.menu_title)
+        print(self.divider)
+        for fid, fname in self.menu.items():
+            print('%s:%s' % (fid, fname))
+        print(self.divider)
+        opt = input('請選擇: ').lower()
+        if opt in self.menu.keys():
+            return opt, self.menu[opt]
+        else:
+            return '', '無此功能！'
+
+    def create_words(self, db, func_title):
+        """ 單字建檔查詢
+        """
+        while True:
+            subopt = input('1.增修 2.查詢 3.刪除 4.列表 exit.離開: ')
+            if subopt == 'exit':
+                break
+            else:
+                print('單字數:', db.count_words())
+
+                if subopt == '4':
+                    db.list_all_words()
+                    continue
+                
+                if subopt in ('1', '2', '3'):
+                    in_word = input('單字: ')
+
+                if subopt == '1':
+                    in_def = input('定義: ')
+                    db.insert_or_update_word(in_word, in_def)
+                    db.check_word_out(in_word)
+                elif subopt == '2':
+                    db.check_word_out(in_word)
+                elif subopt == '3':
+                    db.delete_word(in_word)
+                else:
+                    db.check_word_out(subopt)
+        return func_title
+
+    def set_multiple_choice(self, db, func_title):
+        """ 選擇題型設定
+        """
+        set_type = 'multiple_choice'
+        while True:
+            db.get_settings(set_type, 'show')
+            subopt = input('3.三選一 4.四選一 5.五選一 exit.離開: ')
+            if subopt == 'exit':
+                break
+            else:
+                qnum = input('請輸入題數: ')
+                if qnum.isdigit() and subopt in('3', '4', '5'):
+                    db.update_settings(set_type, int(qnum), int(subopt))
+                else:
+                    print('設定錯誤')            
+        return func_title
+
+    def set_fill_in_the_blank(self, db, func_title):
+        """ 填充題型設定
+        """
+        set_type = 'fill_in_the_blank'
+        while True:
+            db.get_settings(set_type, 'show')
+            subopt = input('1.提示首字母 2.提示首尾字母 exit.離開: ')
+            if subopt == 'exit':
+                break
+            else:
+                qnum = input('請輸入題數: ')
+                if qnum.isdigit() and subopt in('1', '2'):
+                    db.update_settings(set_type, int(qnum), int(subopt))
+                else:
+                    print('設定錯誤')   
+        return func_title
+
+    def examinees(self, db, func_title):
+        """ 參測考生列表
+        """
+        db.list_all_examinees()
+        return func_title
+
+    def summary(self, db, func_title):
+        """ 測驗成績統計
+        """
+        db.score_summary()
+        return func_title
+
+    def score_list(self, db, func_title):
+        """ 個人成績查詢
+        """
+        while True:
+            qaccount = input('請輸入帳號 (exit.離開): ')
+            if qaccount == 'exit':
+                break
+            db.list_scores_by_account(qaccount)
+        return func_title    
+
+# entry point
+with DB() as db:
+    atestcenter = TestCenter()
+    while True:
+        func_id, func_name = atestcenter.show_menu()
+        if func_id == 'q':
+            break
+        elif func_id == '':
+            print(func_name)
+        else:
+            atestcenter.menu_func[func_id](db, func_name)
+        print()
+            </code>
+        </pre>
+
+        <div class="page-section" id="aexaminee"></div>
+        <h3 class="text-center"><span>參測考生</span></h3>
+        <pre>
+            <code class="python"># aexaminee.py
+from adb import DB
+
+class Examinee():
+    def __init__(self):
+        self.menu_title = '參測考生'
+        self.account = ''
+        self.menu = {
+            'a':'登入．註冊',
+            'b':'選擇題測驗',
+            'c':'填充題測驗',
+            'd':'個人成績查詢',
+            'e':'個人資料修改',
+            'f':'亂數播放單字',
+            'q':'離開',
+        }
+        self.menu_func = {
+            'a': lambda db, ft: self.login_or_signup(db, ft),
+            'b': lambda db, ft: self.test_multiple_choice(db, ft),
+            'c': lambda db, ft: self.test_fill_in_the_blank(db, ft),
+            'd': lambda db, ft: self.score_list(db, ft),
+            'e': lambda db, ft: self.profile(db, ft),
+            'f': lambda db, ft: self.show_words_randomly(db, ft),
+        }
+        self.divider = '='*20
+
+    def show_menu(self, account=''):
+        """ 主選單
+        """
+        print(self.divider)
+        if self.account == '':
+            print(self.menu_title, '尚未登入')
+        else:
+            print(self.menu_title, self.account)
+        print(self.divider)
+        for fid, fname in self.menu.items():
+            print('%s:%s' % (fid, fname))
+        print(self.divider)
+        opt = input('請選擇: ').lower()
+        if opt in self.menu.keys():
+            return opt, self.menu[opt]
+        else:
+            return '', '無此功能！'
+
+    def login_or_signup(self, db, func_title):
+        """ 登入．註冊
+        """
+        account_input = input('請輸入帳號: ')
+        if db.check_if_examinee_existed(account_input):
+            self.account = account_input
+            db.print_examinee_info(self.account)
+        else:
+            if db.insert_or_update_examinee(account_input, 'insert'):
+                print('註冊成功，可立即參加測驗')
+
+    def test_multiple_choice(self, db, func_title):
+        """ 選擇題測驗
+        """
+        from random import choice, randint
+        set_type = 'multiple_choice'
+        qtype, qnums = db.get_settings(set_type, 'read')
+        list_all_words = db.generate_dict_words()
+        list_questions = []
+        # 設定題目及答案
+        for i in range(qnums):
+            qitem = choice(list_all_words)
+            if qitem not in list_questions:
+                list_questions.append(qitem)
+        # print(list_questions)
+
+        # 出卷
+        right_count = 0
+        for qindex, qitem in enumerate(list_questions):
+            # 出題
+            print('第 %s 題: %s' % (qindex+1, qitem['WORD']))
+            qitem_ans = randint(1, qtype)
+            for i in range(1, qtype+1):
+                if i == qitem_ans:
+                    print('%s. %s' % (i, qitem['DEFS']))
+                else:
+                    while True:
+                        qitem_other = choice(list_all_words)
+                        if qitem_other != qitem:
+                            print('%s. %s' % (i, qitem_other['DEFS']))
+                            break
+            # 答題
+            ex_choice = input('請選答 (exit.中止): ')
+            if ex_choice == 'exit':
+                return func_title
+            elif ex_choice == str(qitem_ans):
+                right_count += 1
+            print('>'*3)
+
+        # 計算答對題數及分數
+        score = round(right_count/qnums*100)
+        print('答對題數 %s/%s 分數 %s' % (right_count, qnums, score))
+        db.insert_score(self.account, set_type, score)
+        return func_title
+
+    def test_fill_in_the_blank(self, db, func_title):
+        """ 填充題測驗 
+        """
+        from random import choice
+        set_type = 'fill_in_the_blank'
+        qtype, qnums = db.get_settings(set_type, 'read')
+        list_all_words = db.generate_dict_words()
+        list_questions = []
+        # 設定題目及答案
+        for i in range(qnums):
+            qitem = choice(list_all_words)
+            if qitem not in list_questions:
+                list_questions.append(qitem)
+        # print(list_questions)
+
+        # 出卷
+        right_count = 0
+        for qindex, qitem in enumerate(list_questions):
+            # 出題
+            qitem_ans = qitem['WORD']
+            if qtype == 1:
+                qword = qitem_ans[0] + '-'*(len(qitem_ans)-qtype)
+            elif qtype == 2:
+                qword = qitem_ans[0] + '-'*(len(qitem_ans)-qtype) + qitem_ans[-1]
+            print('第 %s 題: %s (%s)' % (qindex+1, qword, qitem['DEFS']))
+            
+            # 答題
+            ex_input = input('請選答 (exit.中止): ')
+            if ex_input == 'exit':
+                return func_title
+            elif ex_input == qitem_ans:
+                right_count += 1
+            print('正確為:', qitem_ans)
+            print('>'*3)
+
+        # 計算答對題數及分數
+        score = round(right_count/qnums*100)
+        print('答對題數 %s/%s 分數 %s' % (right_count, qnums, score))
+        db.insert_score(self.account, set_type, score)
+        return func_title
+
+    def score_list(self, db, func_title):
+        """ 個人成績查詢 
+        """
+        db.list_scores_by_account(self.account)
+        return func_title
+
+    def profile(self, db, func_title):
+        """ 個人資料修改
+        """
+        if db.insert_or_update_examinee(self.account, 'update'):
+            print('--- 資料已更新 ---')
+            db.print_examinee_info(self.account)
+        else:
+            print('--- 資料未更新 ---')
+        return func_title
+
+    def show_words_randomly(self, db, func_title):
+        """ 亂數播放單字
+        """
+        import time
+        from random import choice
+        word_num = input('請輸入單字數量 (10~30): ')
+        sleep_sec = input('請輸入停頓秒數 (0~5): ')
+        if word_num.isdigit() and sleep_sec.isdigit():
+            word_num = int(word_num)
+            sleep_sec = int(sleep_sec)
+            if sleep_sec not in range(6):
+                sleep_sec = 0
+
+            if word_num in range(10, 31):
+                list_all_words = db.generate_dict_words()
+                for i in range(word_num):
+                    w = choice(list_all_words)
+                    # 停頓
+                    if sleep_sec > 0:
+                        time.sleep(sleep_sec)
+                    print(w['WORD'], ':', w['DEFS'])
+            else:
+                print('範圍錯誤')
+        else:
+            print('輸入錯誤')
+        return func_title
+
+# entry point
+with DB() as db:
+    aexaminee = Examinee()
+    while True:
+        func_id, func_name = aexaminee.show_menu()
+        if func_id == 'q':
+            break
+        elif func_id == '':
+            print(func_name)
+        else:
+            if aexaminee.account == '':
+                func_id = 'a'
+                print('請先登入或註冊')
+            aexaminee.menu_func[func_id](db, func_name)
+        print()
+            </code>
+        </pre>
+
+        <div class="page-section" id="adb"></div>
+        <h3 class="text-center"><span>資料庫模組</span></h3>
+        <pre>
+            <code class="python"># adb.py
+class DB():
+    def __init__(self):
+        self.conn = None
+        self.cur = None
+        self.title_side = '-'*12
+
+    def __enter__(self):
+        self.open()
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.close()
+        return False
+
+    def open(self):
+        """ 開啟資料庫連線
+        """
+        if self.conn is None:
+            import sqlite3
+            self.conn = sqlite3.connect('toeic.db')
+            self.cur = self.conn.cursor()
+        return True
+
+    def close(self):
+        """ 關閉資料庫連線
+        """
+        if self.conn is not None:
+            self.conn.close()
+            self.conn = None
+        return True
+
+    def count_words(self):
+        """ 計算單字數
+        """
+        self.cur.execute("SELECT COUNT(*) FROM WORDS")
+        return self.cur.fetchone()[0]
+
+    def get_max_id(self, arg_table):
+        """ 取得資料最新編號
+        """
+        self.cur.execute("SELECT MAX(ID) FROM {}".format(arg_table))
+        return self.cur.fetchone()[0] + 1
+
+    def list_all_words(self):
+        """ 單字列表
+        """
+        self.cur.execute("SELECT * FROM WORDS")
+        all_rows = self.cur.fetchall()
+        for row in all_rows:
+            print('{:3} {:20} {}'.format(*row))
+        print()
+
+    def generate_dict_words(self):
+        """ 設定單字字典
+        """
+        self.cur.execute("SELECT WORD, DEFINITIONS FROM WORDS")
+        all_words = self.cur.fetchall()
+        list_words = [dict(WORD=row[0], DEFS=row[1]) for row in all_words]
+        return list_words
+
+    def insert_or_update_word(self, arg_word, arg_def):
+        """ 增修單字
+        """
+        words_max_id = self.get_max_id('WORDS')
+        self.cur.execute("SELECT COUNT(*) FROM WORDS WHERE WORD=?", (arg_word,))
+        count_result = self.cur.fetchone()[0]
+        if count_result == 0:
+            self.cur.execute("INSERT INTO WORDS VALUES (?, ?, ?)", 
+                (words_max_id, arg_word, arg_def))
+        elif count_result > 0:
+            self.cur.execute("UPDATE WORDS SET DEFINITIONS=? WHERE WORD=?", (arg_def, arg_word))
+        return self.conn.commit()
+
+    def check_word_out(self, arg_word):
+        """ 查詢單字
+        """
+        self.cur.execute("SELECT * FROM WORDS WHERE WORD=?", (arg_word,))
+        result = self.cur.fetchone()
+        if result:
+            print('編號: {}  單字: {}  定義: {}\n'.format(*result))
+        else:
+            print('查無此字\n')
+
+    def delete_word(self, arg_word):
+        """ 刪除單字
+        """         
+        self.cur.execute("DELETE FROM WORDS WHERE WORD=?", (arg_word,))
+        return self.conn.commit()
+
+    def get_settings(self, arg_type, arg_opt):
+        """ 擷取題型設定
+        """
+        self.cur.execute("SELECT OPTION, NUM_OF_QUESTIONS FROM SETTINGS WHERE TYPE=?", (arg_type,))
+        settings = self.cur.fetchone()
+        print('設定選項:%s 題數:%s' % settings)
+        if arg_opt == 'read':
+            return settings
+
+    def update_settings(self, arg_type, arg_qnum, arg_opt):
+        """ 更新題型設定
+        """
+        self.cur.execute("UPDATE SETTINGS SET NUM_OF_QUESTIONS=?, OPTION=? WHERE TYPE=?", 
+            (arg_qnum, arg_opt, arg_type))
+        return self.conn.commit()
+
+    def list_all_examinees(self):
+        """ 考生列表
+        """
+        self.cur.execute("SELECT * FROM EXAMINEES")
+        all_rows = self.cur.fetchall()
+        print('{:3} {:8} {:18} {:4} {:6}'.format('ID', '帳號', '姓名', '性別', '出生年'))
+        print('-'*50)
+        for row in all_rows:
+            print('{:3} {:10} {:20} {:<4} {:6}'.format(*row))
+        print()
+
+    def check_if_examinee_existed(self, arg_account):
+        """ 檢查考生是否註冊
+        """
+        self.cur.execute("SELECT COUNT(*) FROM EXAMINEES WHERE ACCOUNT=?", (arg_account,))
+        if self.cur.fetchone()[0] == 1:
+            return True
+        else:
+            return False
+
+    def insert_or_update_examinee(self, account_id, action):
+        """ 增修考生
+        """
+        data_ok = True
+        full_name = input('姓名: ')
+        if full_name == 'q':
+            return False
+
+        gender = input('性別(F.女性 M.男性): ').upper()
+        if gender not in ('F', 'M'):
+            data_ok = False
+
+        birth_year = input('出生年: ')
+        if birth_year.isdigit():
+            birth_year = int(birth_year)
+            if birth_year not in range(1950, 2007):
+                data_ok = False
+        else:
+            data_ok = False
+
+        # 資料無誤，准許註冊
+        if data_ok:
+            if action == 'insert':
+                examinees_max_id = self.get_max_id('EXAMINEES')
+                self.cur.execute("INSERT INTO EXAMINEES VALUES (?, ?, ?, ?, ?)", 
+                    (examinees_max_id, account_id, full_name, gender, birth_year))
+            elif action == 'update':
+                self.cur.execute("UPDATE EXAMINEES SET NAME=?, GENDER=?, BIRTH_YEAR=? WHERE ACCOUNT=?", 
+                    (full_name, gender, birth_year, account_id))
+            self.conn.commit()
+            return True
+        else:
+            return False
+                        
+    def print_examinee_info(self, account):
+        """ 查詢考生資訊
+        """
+        self.cur.execute("SELECT * FROM EXAMINEES WHERE ACCOUNT=?", (account,))
+        examinee = self.cur.fetchone()
+        print('編號: {}  帳號: {}\n姓名: {}\n性別: {}\n出生年: {}'.format(*examinee))
+
+    def insert_score(self, account, ex_type, ex_score):
+        """ 增修單字
+        """
+        scores_max_id = self.get_max_id('SCORES')
+        self.cur.execute("INSERT INTO SCORES VALUES (?, ?, ?, ?, date('now'))", 
+            (scores_max_id, account, ex_type, ex_score))
+        return self.conn.commit()
+
+    def sql_case_type(self):
+        return '''CASE TYPE WHEN 'multiple_choice' THEN '選擇題' 
+                            WHEN 'fill_in_the_blank' THEN '填空題' END TYPE'''
+    
+    def show_one_score(self, row):
+        print('{:3} {:10} {:3} {:4} {:10}'.format(*row))
+
+    def list_scores_by_account(self, account):
+        """ 個人成績查詢
+        """
+        case_type = self.sql_case_type()
+        account_like = ''.join(('%', account, '%'))
+
+        self.cur.execute('''SELECT ID, ACCOUNT, {}, SCORE, DATE_TIME FROM SCORES 
+            WHERE ACCOUNT LIKE ? ORDER BY DATE_TIME DESC'''.format(case_type), (account_like,))
+        all_rows = self.cur.fetchall()
+        if len(all_rows):
+            for row in all_rows:
+                self.show_one_score(row)
+        else:
+            print(account, '查無任何成績')
+
+    def score_summary(self):
+        """ 測驗成績統計
+        """
+        case_type = self.sql_case_type()
+
+        print(self.title_side, '測驗人數及平均分數', self.title_side)
+        sql = "SELECT {}, COUNT(*), AVG(SCORE) FROM SCORES GROUP BY TYPE"
+        self.cur.execute(sql.format(case_type))
+        all_rows = self.cur.fetchall()
+        if len(all_rows):
+            for row in all_rows:
+                print('{:3} {:4} {:6}'.format(*row))
+        print(self.title_side, '成績列表依日期降冪', self.title_side)
+        sql = "SELECT ID, ACCOUNT, {}, SCORE, DATE_TIME FROM SCORES ORDER BY DATE_TIME DESC"
+        self.cur.execute(sql.format(case_type))
+        all_rows = self.cur.fetchall()
+        if len(all_rows):
+            for row in all_rows:
+                self.show_one_score(row)
+
+if __name__ == '__main__':
+    print('This is the DB class.')
+            </code>
+        </pre>
+      </main>
+
+      <hr>
+      <footer class="footer">
+        <p>&copy; 2020 碼寶程式教育中心</p>
+      </footer>
+    </div> <!-- /container -->
+
+    <script src="/static/jquery.slim.min.js"></script>
+    <script src="/static/popper.min.js"></script>
+    <script src="/static/bootstrap.min.js"></script>
+    <script src="/static/highlight.min.js"></script>
+    <script src="/static/highlightjs-line-numbers.min.js"></script>
+    <script src="/static/main.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad();
+        hljs.initLineNumbersOnLoad();
+    </script>
+  </body>
+</html>
