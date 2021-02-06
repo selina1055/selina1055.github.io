@@ -105,7 +105,7 @@ class DB():
         return self.conn.commit()
 
     def list_all_examinees(self):
-        """ 考生列表
+        """ 讀者列表
         """
         self.cur.execute("SELECT * FROM EXAMINEES")
         all_rows = self.cur.fetchall()
@@ -116,7 +116,7 @@ class DB():
         print()
 
     def check_if_examinee_existed(self, arg_account):
-        """ 檢查考生是否註冊
+        """ 檢查讀者是否註冊
         """
         self.cur.execute("SELECT COUNT(*) FROM EXAMINEES WHERE ACCOUNT=?", (arg_account,))
         if self.cur.fetchone()[0] == 1:
@@ -125,7 +125,7 @@ class DB():
             return False
 
     def insert_or_update_examinee(self, account_id, action):
-        """ 增修考生
+        """ 增修讀者
         """
         data_ok = True
         full_name = input('姓名: ')
@@ -159,14 +159,14 @@ class DB():
             return False
                         
     def print_examinee_info(self, account):
-        """ 查詢考生資訊
+        """ 查詢讀者資訊
         """
         self.cur.execute("SELECT * FROM EXAMINEES WHERE ACCOUNT=?", (account,))
         examinee = self.cur.fetchone()
         print('編號: {}  帳號: {}\n姓名: {}\n性別: {}\n出生年: {}'.format(*examinee))
 
     def insert_score(self, account, ex_type, ex_score):
-        """ 增修單字
+        """ 增修文字
         """
         scores_max_id = self.get_max_id('SCORES')
         self.cur.execute("INSERT INTO SCORES VALUES (?, ?, ?, ?, date('now'))", 
@@ -174,8 +174,8 @@ class DB():
         return self.conn.commit()
 
     def sql_case_type(self):
-        return '''CASE TYPE WHEN 'multiple_choice' THEN '選擇題' 
-                            WHEN 'fill_in_the_blank' THEN '填空題' END TYPE'''
+        return '''CASE TYPE WHEN 'multiple_choice' THEN '選擇類型' 
+                            WHEN 'fill_in_the_blank' THEN '關鍵字' END TYPE'''
     
     def show_one_score(self, row):
         print('{:3} {:10} {:3} {:4} {:10}'.format(*row))
