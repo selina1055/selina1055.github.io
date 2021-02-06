@@ -7,20 +7,20 @@ class Examinee():
         self.account = ''
         self.menu = {
             'a':'登入．註冊',
-            'b':'選擇題測驗',
-            'c':'填充題測驗',
-            'd':'個人成績查詢',
-            'e':'個人資料修改',
-            'f':'亂數播放單字',
+            'b':'選擇類型',
+            'c':'關鍵字查詢',
+            'd':'熱門排行榜',
+            'e':'意見回饋',
+            'f':'個人資料查詢',
             'q':'離開',
         }
         self.menu_func = {
             'a': lambda db, ft: self.login_or_signup(db, ft),
-            'b': lambda db, ft: self.test_multiple_choice(db, ft),
-            'c': lambda db, ft: self.test_fill_in_the_blank(db, ft),
-            'd': lambda db, ft: self.score_list(db, ft),
-            'e': lambda db, ft: self.profile(db, ft),
-            'f': lambda db, ft: self.show_words_randomly(db, ft),
+            'b': lambda db, ft: self.type_multiple_choice(db, ft),
+            'c': lambda db, ft: self.keywords_check(db, ft),
+            'd': lambda db, ft: self.rank_list(db, ft),
+            'e': lambda db, ft: self.comment(db, ft),
+            'f': lambda db, ft: self.personal_data(db, ft),
         }
         self.divider = '='*20
 

@@ -18,7 +18,7 @@ class DB():
         """
         if self.conn is None:
             import sqlite3
-            self.conn = sqlite3.connect('toeic.db')
+            self.conn = sqlite3.connect('novel.db')
             self.cur = self.conn.cursor()
         return True
 
@@ -31,7 +31,7 @@ class DB():
         return True
 
     def count_words(self):
-        """ 計算單字數
+        """ 計算字數
         """
         self.cur.execute("SELECT COUNT(*) FROM WORDS")
         return self.cur.fetchone()[0]
@@ -43,7 +43,7 @@ class DB():
         return self.cur.fetchone()[0] + 1
 
     def list_all_words(self):
-        """ 單字列表
+        """ 書籍列表
         """
         self.cur.execute("SELECT * FROM WORDS")
         all_rows = self.cur.fetchall()
@@ -60,7 +60,7 @@ class DB():
         return list_words
 
     def insert_or_update_word(self, arg_word, arg_def):
-        """ 增修單字
+        """ 增修字數
         """
         words_max_id = self.get_max_id('WORDS')
         self.cur.execute("SELECT COUNT(*) FROM WORDS WHERE WORD=?", (arg_word,))
@@ -73,7 +73,7 @@ class DB():
         return self.conn.commit()
 
     def check_word_out(self, arg_word):
-        """ 查詢單字
+        """ 查詢字數
         """
         self.cur.execute("SELECT * FROM WORDS WHERE WORD=?", (arg_word,))
         result = self.cur.fetchone()
@@ -83,7 +83,7 @@ class DB():
             print('查無此字\n')
 
     def delete_word(self, arg_word):
-        """ 刪除單字
+        """ 刪除字數
         """         
         self.cur.execute("DELETE FROM WORDS WHERE WORD=?", (arg_word,))
         return self.conn.commit()
